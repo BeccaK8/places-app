@@ -4,7 +4,7 @@
 const express = require('express');  // import express framework
 require('dotenv').config();          // import/load ENV variables
 const path = require('path');        // import path module
-
+const middleware = require('./utils/middleware');
 
 
 //=======================================
@@ -12,16 +12,19 @@ const path = require('path');        // import path module
 //=======================================
 
 
-//=======================================
-//===== Create app object           =====
-//=======================================
+//==================================================
+//===== Create app object + set up view engine =====
+//==================================================
 const app = express();               // create the express function
+
+// view engine - ejs
+app.set('views', path.join(__dirname, 'views')); // allows us to skip writing 'views' every time we want to call into the views folder
+app.set('view engine', 'ejs');
 
 //=======================================
 //===== Middleware                  =====
 //=======================================
-
-
+middleware(app);
 
 //=======================================
 //===== Routes                      =====
