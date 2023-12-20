@@ -3,6 +3,7 @@
 /////////////////////////////
 const express = require('express')
 const axios = require('axios')
+const Place = require('../models/place')
 const allPlacesUrl = process.env.COUNTRY_API_URL
 const nameSearchBaseUrl = process.env.C_BY_NAME_BASE_URL
 
@@ -33,6 +34,31 @@ router.get('/all', (req, res) => {
             res.redirect(`/error?error=${err}`)
         })
 })
+
+// POST -> /places/add
+// gets data from the all countries show pages and adds to user's list
+router.post('/add', (req, res) => {
+    const { username, loggedIn, userId } = req.session;
+
+    const thePlace = req.body;
+    thePlace.owner = userId;
+    // default value for a checked checkbox is 'on'
+    // this line of code converts that two times
+    // which results in a boolean value
+    thePlace.visited = !!thePlace.visited;
+    thePlace.wishList = !!thePlace.wishList;
+    thePlace.favorite = !!thePlace.favorite;
+
+    Place.create(thePlace)
+        .then(newPlace => {
+            res.redirect(`/places/${newPlace.name}`);
+        })
+        // if something goes wrong, display an error page
+        .catch(err => {
+            console.log('error')
+            res.redirect(`/error?error=${err}`)
+        })
+});
 
 // GET -> /places/:name
 // give us a specific country's details after searching with the name
