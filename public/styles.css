@@ -2,10 +2,15 @@ body {
     background-color: lightsteelblue;
 }
 
+/* TODO maybe have a different one of each of these for smaller/larger media sizes */
 .countryCard {
     width: 30%;
 }
 
 img {
     width: 50%;
+}
+
+.coatOfArms {
+    height: 50%;
 }
