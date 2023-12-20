@@ -51,9 +51,44 @@ router.post('/add', (req, res) => {
 
     Place.create(thePlace)
         .then(newPlace => {
-            res.redirect(`/places/${newPlace.name}`);
+            res.redirect('/places/mine');
         })
         // if something goes wrong, display an error page
+        .catch(err => {
+            console.log('error')
+            res.redirect(`/error?error=${err}`)
+        })
+});
+
+// GET -> /places/mine
+// displays all the user's saved places
+router.get('/mine', (req, res) => {
+    const { username, loggedIn, userId } = req.session;
+    // query database for all places belonging to logged in user
+    Place.find({ owner: userId })
+        // display them in a list format
+        .then(userPlaces => {
+            res.render('places/mine', { places: userPlaces, username, loggedIn, userId });
+        })
+        // or display any errors
+        .catch(err => {
+            console.log('error')
+            res.redirect(`/error?error=${err}`)
+        })
+});
+
+// GET -> /places/mine/:id
+// will display a single instance of a user's saved places
+router.get('/mine/:id', (req, res) => {
+    const { username, loggedIn, userId } = req.session;
+
+    // find a specific place using the id
+    Place.findById(req.params.id)
+        // display a user specific show page
+        .then(thePlace => {
+            res.send(thePlace);
+        })
+        // or display any errors
         .catch(err => {
             console.log('error')
             res.redirect(`/error?error=${err}`)
