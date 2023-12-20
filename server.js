@@ -38,6 +38,14 @@ app.get('/', (req, res) => {
 // Register my routes
 app.use('/users', UserRouter);
 
+// error page
+app.get('/error', (req, res) => {
+    const error = req.query.error || 'Oops! Something went wrong. Please try again.';
+    const { username, loggedIn, userId } = req.session;
+    //res.send(error);
+    res.render('error', { error, username, loggedIn, userId });
+});
+
 //=======================================
 //===== Server Listener             =====
 //=======================================

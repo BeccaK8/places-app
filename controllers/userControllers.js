@@ -42,8 +42,9 @@ router.post('/signup', async (req, res) => {
             res.redirect('/users/login');
         })
         .catch(err => {
-            console.log('something went wrong');
-            console.log(err)
+            console.log(err);
+            //use our new error page
+            res.redirect(`/error?error=${err}`);
         });
 });
 
@@ -80,16 +81,16 @@ router.post('/login', async (req, res) => {
                     res.redirect('/');
                 } else {
                     // wrong password
-                    res.send('something went wrong - no pw match');
+                    res.redirect('/error?error=something%20wrong%20with%20credentials');
                 }
 
             } else {
-                res.send('something went wrong - no user with that name');
+                res.redirect('/error?error=user%20does%20not%20exist');
             }
         })
         .catch(err => {
-            console.log('something went wrong');
-            console.log(err)
+            console.log(err);
+            res.redirect(`/error?error=${err}`);
         });
 });
 
